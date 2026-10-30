@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Episodio 43 · Válido no es verdadero · Espacio Latente</title>
+<meta name="description" content="Getty Images se declara en quiebra, dos equipos con IA encuentran el mismo agujero en el motor de buena parte de la web y una pregunta incómoda: qué nos pasa cuando una máquina siempre nos da la razón.">
+<meta property="og:title" content="Espacio Latente · Episodio 43: Válido no es verdadero">
+<meta property="og:description" content="Getty Images se declara en quiebra, dos equipos con IA encuentran el mismo agujero en el motor de buena parte de la web y una pregunta incómoda: qué nos pasa cuando una máquina siempre nos da la razón.">
+<meta property="og:image" content="portada.jpg">
+<!-- Página pública de un episodio de ESPACIO LATENTE (H8c, ADR-013). La rellena oyentes/pagina.py con Jinja2 desde
+     06_web/notas.json del episodio; la misma página, impresa por Chromium, es el PDF (@media print: papel claro, A4).
+     Tipografías: Anton y Barlow (SIL OFL 1.1), servidas por el propio sitio en fuentes/. Marca: docs/LIBRO_DE_ESTILO.md. -->
+<style>
+@font-face { font-family:"Anton"; src:url("../fuentes/Anton-Regular.ttf"); font-display:swap; }
+@font-face { font-family:"Barlow"; font-weight:400; src:url("../fuentes/Barlow-Regular.ttf"); font-display:swap; }
+@font-face { font-family:"Barlow"; font-weight:500; src:url("../fuentes/Barlow-Medium.ttf"); font-display:swap; }
+:root {
+  --fondo:#000; --texto:#F4F2E5; --texto-2:rgba(244,242,229,.68); --linea:rgba(244,242,229,.16);
+  --acento:#5FD5D9;           /* turquesa señal: solo acento (libro de estilo) */
+  --enlace:#5FD5D9;
+}
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; background:var(--fondo); color:var(--texto); font:400 18px/1.6 "Barlow", system-ui, sans-serif; }
+a { color:var(--enlace); text-underline-offset:3px; }
+.anton { font-family:"Anton", "Arial Narrow", sans-serif; font-weight:400; letter-spacing:.01em; }
+main { max-width:760px; margin:0 auto; padding:0 16px 64px; }
+
+/* cabecera */
+.barra { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 0 18px;
+  border-bottom:4px solid var(--acento); }
+.barra .logo { --h:72px; display:flex; align-items:flex-start; gap:calc(var(--h) * .07); text-decoration:none; }
+.barra .logo img { height:var(--h); display:block; }
+/* número a la altura del logo: las cifras de Anton miden 0,871 em y, con line-height 1, empiezan 0,0625 em abajo */
+.barra .num { font-size:calc(var(--h) / .871); line-height:1; height:var(--h); margin-top:calc(var(--h) / .871 * -.0625);
+  color:var(--texto); }
+.cabecera-der { display:flex; flex-direction:column; align-items:flex-end; gap:6px; text-align:right; }
+.spotify { display:inline-flex; align-items:center; gap:10px; background:#1ED760; color:#000; text-decoration:none;
+  font-weight:500; font-size:15px; text-transform:uppercase; letter-spacing:.06em; padding:8px 16px; border-radius:6px; }
+.spotify svg { width:22px; height:22px; flex:none; }   /* guías de Spotify: mínimo 21 px en digital */
+.edicion { margin:4px 0 0; font:400 14px/1.3 ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--texto-2); }
+.fecha { margin:0; font-size:15px; line-height:26px; color:var(--texto-2); }
+.fecha .caras { vertical-align:middle; margin:0 4px 0 2px; position:relative; top:-1px; }
+.fecha b { color:var(--texto); font-weight:500; }
+.fecha .nombres { white-space:nowrap; }
+.portada { display:grid; grid-template-columns:300px 1fr; gap:36px; align-items:center; padding:40px 0 32px; }
+.portada img { width:100%; aspect-ratio:7/10; object-fit:cover; display:block; }
+.meta { color:var(--texto-2); font-size:15px; text-transform:uppercase; letter-spacing:.08em; margin:0 0 8px; }
+h1 { font-size:clamp(40px, 8vw, 64px); line-height:1; margin:0 0 16px; text-transform:uppercase; }
+.entradilla { margin:0; font-size:19px; color:var(--texto); }
+.acciones { display:flex; flex-wrap:wrap; gap:12px; margin:0 0 8px; }
+.boton { display:inline-block; padding:10px 22px; border-radius:999px; font-weight:500; text-decoration:none; }
+.boton.principal { background:var(--acento); color:#000; }
+.boton.secundario { border:1px solid rgba(244,242,229,.35); color:var(--texto); }
+
+/* presentadores: retratos fijos y fotograma del reel de la semana */
+.caras { display:inline-flex; margin-right:2px; }
+.caras img { width:26px; height:26px; border-radius:50%; border:2px solid var(--fondo); object-fit:cover; }
+.caras img + img { margin-left:-8px; }
+.rafaga img.cara { position:absolute; left:40px; top:0; width:32px; height:32px; border-radius:50%; object-fit:cover; }
+.con-presentador { display:grid; grid-template-columns:1fr 220px; gap:28px; align-items:start; }
+.con-presentador .presentador { order:2; }
+.presentador { margin:0; }
+.presentador img { width:100%; aspect-ratio:9/16; object-fit:cover; display:block; }
+
+/* capítulos */
+h2 { font-size:clamp(30px, 6vw, 40px); line-height:1.05; margin:0 0 14px; text-transform:uppercase; }
+.bloque { padding:36px 0 8px; border-top:1px solid var(--linea); margin-top:28px; }
+.capitulos { list-style:none; margin:0; padding:0; columns:2; column-gap:32px; }
+.capitulos li { break-inside:avoid; display:flex; gap:14px; padding:4px 0; }
+.capitulos .min { color:var(--acento); font-variant-numeric:tabular-nums; min-width:44px; }
+.capitulos a { color:var(--texto); text-decoration:none; }
+
+/* ráfaga */
+.rafaga { margin:0; padding:0; list-style:none; counter-reset:r; }
+.rafaga li { position:relative; padding:0 0 18px 88px; min-height:50px; counter-increment:r; }
+.rafaga li::before { content:counter(r, decimal-leading-zero); position:absolute; left:0; top:2px; font-family:"Anton", sans-serif; color:var(--acento); }
+
+/* temas */
+.tema { padding:40px 0 4px; border-top:1px solid var(--linea); margin-top:28px; break-inside:avoid-page; }
+.antetitulo { color:var(--texto-2); font-size:15px; text-transform:uppercase; letter-spacing:.08em; margin:0 0 8px; }
+.antetitulo b { color:var(--acento); font-weight:500; }
+.dato { display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:end; margin:6px 0 18px; }
+.dato .cifra { font-size:clamp(44px, 9vw, 64px); line-height:.9; color:var(--acento); white-space:nowrap; }
+.dato .unidad { color:var(--texto-2); font-size:16px; line-height:1.3; padding-bottom:4px; }
+.ilus { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; margin:6px 0 18px; }
+.tema p, .historia p { margin:0 0 14px; }
+.fuentes { font-size:15px; color:var(--texto-2); margin:4px 0 0; padding:0; list-style:none; }
+.fuentes li { padding:2px 0; }
+.fuentes li::before { content:"→ "; color:var(--acento); }
+.mini-fuente { font-size:14px; color:var(--texto-2); }
+
+/* historia */
+.anio { font-size:clamp(64px, 14vw, 104px); line-height:.9; color:var(--acento); margin:0 0 10px; }
+
+/* miniproyecto */
+.mini { border:1px solid var(--linea); border-left:4px solid var(--acento); padding:24px; margin-top:12px; }
+.mini dl { display:grid; grid-template-columns:auto 1fr; gap:4px 16px; margin:0 0 16px; }
+.mini dt { color:var(--texto-2); text-transform:uppercase; font-size:14px; letter-spacing:.06em; padding-top:3px; }
+.mini dd { margin:0; }
+.mini ol { margin:0 0 12px; padding-left:22px; }
+.mini li { margin-bottom:8px; }
+.aviso { font-size:15px; color:var(--texto-2); }
+
+.pregunta { font-size:22px; line-height:1.4; margin:0; }
+footer { margin-top:48px; padding-top:20px; border-top:1px solid var(--linea); font-size:14px; color:var(--texto-2); }
+footer p { margin:0 0 8px; }
+
+@media (max-width:560px) {
+  /* logo y botón en la misma fila; edición y fecha debajo, a todo el ancho */
+  .barra { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:10px 12px; }
+  .cabecera-der { display:contents; }
+  .spotify { justify-self:end; font-size:13px; padding:7px 12px; gap:8px; }
+  .edicion, .fecha { grid-column:1 / -1; text-align:left; }
+  .barra .logo { --h:48px; }
+  body { font-size:17px; }
+  .portada { grid-template-columns:1fr; gap:20px; padding-top:24px; }
+  .portada img { aspect-ratio:4/3; }
+  .capitulos { columns:1; }
+  .dato { grid-template-columns:1fr; gap:4px; }
+  .con-presentador { grid-template-columns:1fr; gap:16px; }
+  .con-presentador .presentador { order:0; width:60%; }
+}
+
+/* PDF: papel claro A4, mismo contenido. El turquesa no sirve para texto sobre claro (contraste ≈1,8:1): solo filetes. */
+@page { size:A4; margin:16mm 16mm 18mm; }
+@media print {
+  :root { --fondo:#fff; --texto:#111; --texto-2:#555; --linea:#d8d8d0; --enlace:#0b6b6e; }
+  body { font-size:11pt; line-height:1.5; }
+  main { max-width:none; padding:0; }
+  .barra img.claro { display:none; }
+  .barra img.oscuro { display:block !important; }
+  .acciones { display:none; }
+  .barra { border-bottom-width:2px; }
+  .portada { grid-template-columns:52mm 1fr; padding:8mm 0 4mm; }
+  .barra .logo { --h:20mm; }
+  h1 { font-size:32pt; }
+  h2 { font-size:20pt; }
+  .entradilla { font-size:12pt; }
+  .bloque, .tema { padding-top:6mm; margin-top:5mm; }
+  .capitulos .min, .rafaga li::before, .antetitulo b, .dato .cifra, .anio { color:#0b6b6e; }
+  .dato .cifra { font-size:30pt; }
+  .anio { font-size:44pt; }
+  .ilus { aspect-ratio:21/9; max-height:62mm; }
+  .con-presentador { grid-template-columns:1fr 42mm; gap:6mm; }
+  .caras img { border-color:#fff; }
+  .tema { break-inside:auto; }
+  h2, .antetitulo, .dato { break-after:avoid; }
+  .boton.principal { color:#000; }
+  .fuentes a::after { content:" (" attr(href) ")"; color:#777; font-size:8.5pt; word-break:break-all; }
+  footer { margin-top:8mm; }
+}
+</style>
+</head>
+<body>
+<main>
+  <!-- Cabecera según el boceto de Joan (2026-10-27): logo a la izquierda; a la derecha, botón de Spotify, edición y
+       fecha con los presentadores; filete turquesa debajo. Icono oficial de Spotify en negro sobre su verde. -->
+  <header class="barra">
+    <a target="_blank" rel="noopener" href="../" class="logo"><span class="num anton">43</span><img class="claro" src="../logo-blanco.png" alt="Espacio Latente · todos los episodios"><img class="oscuro" src="../logo-negro.png" alt="Espacio Latente" style="display:none"></a>
+    <div class="cabecera-der">
+      <a target="_blank" rel="noopener" class="spotify" href="https://open.spotify.com/show/1MN3KewzzkuTVx7EzbHwF2"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236.05 225.25"><path fill="currentColor" d="m122.37,3.31C61.99.91,11.1,47.91,8.71,108.29c-2.4,60.38,44.61,111.26,104.98,113.66,60.38,2.4,111.26-44.6,113.66-104.98C229.74,56.59,182.74,5.7,122.37,3.31Zm46.18,160.28c-1.36,2.4-4.01,3.6-6.59,3.24-.79-.11-1.58-.37-2.32-.79-14.46-8.23-30.22-13.59-46.84-15.93-16.62-2.34-33.25-1.53-49.42,2.4-3.51.85-7.04-1.3-7.89-4.81-.85-3.51,1.3-7.04,4.81-7.89,17.78-4.32,36.06-5.21,54.32-2.64,18.26,2.57,35.58,8.46,51.49,17.51,3.13,1.79,4.23,5.77,2.45,8.91Zm14.38-28.72c-2.23,4.12-7.39,5.66-11.51,3.43-16.92-9.15-35.24-15.16-54.45-17.86-19.21-2.7-38.47-1.97-57.26,2.16-1.02.22-2.03.26-3.01.12-3.41-.48-6.33-3.02-7.11-6.59-1.01-4.58,1.89-9.11,6.47-10.12,20.77-4.57,42.06-5.38,63.28-2.4,21.21,2.98,41.46,9.62,60.16,19.74,4.13,2.23,5.66,7.38,3.43,11.51Zm15.94-32.38c-2.1,4.04-6.47,6.13-10.73,5.53-1.15-.16-2.28-.52-3.37-1.08-19.7-10.25-40.92-17.02-63.07-20.13-22.15-3.11-44.42-2.45-66.18,1.97-5.66,1.15-11.17-2.51-12.32-8.16-1.15-5.66,2.51-11.17,8.16-12.32,24.1-4.89,48.74-5.62,73.25-2.18,24.51,3.44,47.99,10.94,69.81,22.29,5.12,2.66,7.11,8.97,4.45,14.09Z"/></svg>Escuchar en Spotify</a>
+      <p class="edicion">Semanario oficial de IA · Edición #043</p>
+      <p class="fecha">Martes, 27 de octubre de 2026 · Con <span class="caras"><img src="../presentadores/ana.jpg" alt=""><img src="../presentadores/andres.jpg" alt=""></span><span class="nombres"><b>Ana Coll</b> y <b>Andrés Camacho</b></span></p>
+    </div>
+  </header>
+
+  <section class="portada">
+    <img src="gancho.jpg" alt="">
+    <div>
+      <p class="meta">Episodio 43 · 28:28</p>
+      <h1 class="anton">Válido no es verdadero</h1>
+      <p class="entradilla">Getty Images se declara en quiebra, dos equipos con IA encuentran el mismo agujero en el motor de buena parte de la web y una pregunta incómoda: qué nos pasa cuando una máquina siempre nos da la razón.</p>
+    </div>
+  </section>
+  <div class="acciones">
+    <a target="_blank" rel="noopener" class="boton secundario" href="espacio-latente-e043.pdf" download>Descargar PDF</a>
+  </div>
+
+  <section class="bloque">
+    <h2 class="anton">En este episodio</h2>
+    <ol class="capitulos">
+      <li><span class="min">0:00</span><a href="#rafaga">Apertura y Ráfaga semanal</a></li>
+      <li><span class="min">2:47</span><a href="#php2shell-el-agujero-en-el-motor-de-la-web">PHP2Shell: el agujero en el motor de la web</a></li>
+      <li><span class="min">6:32</span><a href="#agentes-con-frenos">Agentes con frenos</a></li>
+      <li><span class="min">9:18</span><a href="#modelos-que-no-escriben">Modelos que no escriben</a></li>
+      <li><span class="min">13:43</span><a href="#aesia-y-el-reglamento-europeo">AESIA y el Reglamento europeo</a></li>
+      <li><span class="min">16:29</span><a href="#la-quiebra-de-getty-images">La quiebra de Getty Images</a></li>
+      <li><span class="min">20:17</span><a href="#una-ia-que-siempre-te-da-la-razon">Una IA que siempre te da la razón</a></li>
+      <li><span class="min">23:51</span><a href="#willow-y-los-estados-magicos">Willow y los estados mágicos</a></li>
+      <li><span class="min">25:58</span><a href="#george-boole-y-las-leyes-del-pensamiento">Historia de la IA: George Boole y las leyes del pensamiento</a></li>
+      <li><span class="min">27:43</span><span>Cierre</span></li>
+      
+    </ol>
+  </section>
+
+  <section class="bloque" id="rafaga">
+    <p class="antetitulo">Apertura</p>
+    <h2 class="anton">Ráfaga semanal</h2>
+    <ol class="rafaga">
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">Anthropic completa la renovación de su familia de modelos con Claude Haiku 5.5, el pequeño y rápido, pensado para resúmenes, subagentes y uso del navegador. Llega después de Opus 5.5 y Sonnet 5.5, todo en poco más de dos semanas. <a target="_blank" rel="noopener" class="mini-fuente" href="https://www.anthropic.com/news/models">Anthropic</a></li>
+      <li><img class="cara" src="../presentadores/andres.jpg" alt="Andrés Camacho" title="Andrés Camacho">La Unión Europea publica en su Diario Oficial la primera norma armonizada del Reglamento de IA, la EN 18286, sobre sistemas de gestión de calidad. Quien la aplique tendrá a su favor la presunción de cumplir esa parte de la ley. <a target="_blank" rel="noopener" class="mini-fuente" href="https://digital-strategy.ec.europa.eu/en/library/first-harmonised-standard-supporting-ai-act-published-official-journal">Comisión Europea</a></li>
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">La china Moonshot lanza Kimi K3.1 Pro: 55 puntos en Artificial Analysis, solo por detrás de Opus 5.5 (58), a la mitad de precio. Promete publicar los pesos antes del 4 de noviembre. <a target="_blank" rel="noopener" class="mini-fuente" href="https://simonwillison.net/2026/Oct/23/kimi-k31-pro/">Simon Willison</a></li>
+      <li><img class="cara" src="../presentadores/andres.jpg" alt="Andrés Camacho" title="Andrés Camacho">Stanford publica paneles mensuales sobre el efecto de la IA en el empleo. Entre los 22 y los 25 años, el empleo en programación y atención al cliente cae un 4,4 %. <a target="_blank" rel="noopener" class="mini-fuente" href="https://hai.stanford.edu/news/tracking-ais-real-time-footprint-on-the-labor-market">Stanford HAI</a></li>
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">OpenAI, PerturbAI y el instituto Scripps han usado miles de agentes de IA en paralelo para buscar pistas en datos de millones de células cerebrales. De momento solo hay anuncio, sin cifras ni método. <a target="_blank" rel="noopener" class="mini-fuente" href="https://openai.com/index/scaling-ai-research-for-complex-biological-data">OpenAI</a></li>
+      <li><img class="cara" src="../presentadores/andres.jpg" alt="Andrés Camacho" title="Andrés Camacho">Un trabajo de NVIDIA genera a la vez un vídeo y la animación en 3D de cualquier esqueleto digital, con su cámara: el salto que ves en el vídeo te lo puedes llevar como animación a tu escena. <a target="_blank" rel="noopener" class="mini-fuente" href="https://arxiv.org/abs/2610.28632">arXiv</a></li>
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">Investigadores del MIT dejaron varias copias de Claude treinta horas solas en una isla virtual, sin ninguna tarea. Se inventaron juegos y después resolvían mejor las tareas que las copias sin esa experiencia. <a target="_blank" rel="noopener" class="mini-fuente" href="https://www.technologyreview.com/2026/10/19/1147095/ai-stranded-claude-virtual-desert-island-play/">MIT Technology Review</a></li>
+      
+    </ol>
+  </section>
+
+  
+  <article class="tema" id="php2shell-el-agujero-en-el-motor-de-la-web">
+    <p class="antetitulo">Técnica · <b>min. 2:47</b></p>
+    <h2 class="anton">PHP2Shell: el agujero en el motor de la web</h2>
+    <img class="ilus" src="tema-01.jpg" alt="">
+    <div class="dato"><span class="cifra anton">70 %</span><span class="unidad">de las webs con lenguaje conocido funcionan con PHP</span></div>
+    <div class="">
+      
+      <div>
+        <p>PHP es el lenguaje con el que funcionan por dentro WordPress, Drupal, Joomla y una enorme parte de la web. En agosto, un investigador de Calif, dentro del programa Patch the Planet de OpenAI, encontró con GPT-5.6 Sol dos fallos graves en el núcleo de PHP. Wiz los encontró por su cuenta con Gemini 4 Argon y GPT-5.6 Sol. Según sus descubridores, permiten ejecutar código en el servidor sin identificarse.</p><p>Tras unos dos meses de trabajo discreto, PHP publicó las versiones corregidas el 21 de octubre. Su gravedad es de 9,2 sobre 10. La lección práctica: si tienes una web en PHP o un WordPress, actualiza PHP, no solo los complementos.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities">OpenAI, Patch the Planet</a></li><li><a target="_blank" rel="noopener" href="https://www.latent.space/p/ainews-openais-patch-the-planet-program">Latent Space (AINews)</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="agentes-con-frenos">
+    <p class="antetitulo">Técnica · <b>min. 6:32</b></p>
+    <h2 class="anton">Agentes con frenos</h2>
+    
+    
+    <div class="">
+      
+      <div>
+        <p>Varias empresas de finanzas explicaron en la conferencia AI Engineer de Nueva York cómo controlan a sus agentes. Two Sigma advierte de la «fatiga de aprobar»: si una persona tiene que validarlo todo, acaba aprobando sin mirar. Su propuesta es que clasificadores automáticos resuelvan lo rutinario y solo pase a una persona lo que importa. Bloomberg contó el caso de un agente que obedeció una instrucción escondida en una reseña.</p><p>OfficeTown, un trabajo académico, simula organizaciones enteras para entrenar y evaluar agentes en trabajo de oficina: 406 tareas en 23 organizaciones de 8 sectores. La idea que une las dos historias: cuanto más autónomo es un agente, más importa decidir quién revisa qué.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://latent.space/p/crossing-the-threshold/">Latent Space, «Crossing the Threshold»</a></li><li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.23194">OfficeTown (arXiv)</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="modelos-que-no-escriben">
+    <p class="antetitulo">Técnica · <b>min. 9:18</b></p>
+    <h2 class="anton">Modelos que no escriben</h2>
+    <img class="ilus" src="tema-03.jpg" alt="">
+    <div class="dato"><span class="cifra anton">100 %</span><span class="unidad">de respuestas con el formato correcto</span></div>
+    <div class="">
+      
+      <div>
+        <p>La decodificación restringida impide que un modelo escriba los tokens que romperían un formato fijo: garantiza la forma, no que el contenido sea cierto. ScaleDown ha tomado ese nombre para cuatro modelos de una sola tarea, los llamados CDM. Una réplica sostiene que son técnicas conocidas bien empaquetadas. Jev, de TypeSafe AI, responde preguntas cerradas con una probabilidad entrenada para ser honesta.</p><p>Un estudio de septiembre con cinco modelos pequeños lo resume bien: con la restricción, el formato salió correcto el 100 % de las veces, pero aparecieron respuestas impecables y vacías. Hay que comprobar lo que dicen, no solo cómo lo dicen.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://www.covaratech.com/blog/cdm-models">Covara Tech, decodificación restringida y CDM</a></li><li><a target="_blank" rel="noopener" href="https://www.infoq.com/news/2026/10/typesafe-ai-jev-released/">InfoQ, Jev de TypeSafe AI</a></li><li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2609.23742">Estudio de septiembre (arXiv)</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="aesia-y-el-reglamento-europeo">
+    <p class="antetitulo">Política · <b>min. 13:43</b></p>
+    <h2 class="anton">AESIA y el Reglamento europeo</h2>
+    <img class="ilus" src="tema-04.jpg" alt="">
+    <div class="dato"><span class="cifra anton">35 M€</span><span class="unidad">o el 7 % de la facturación: multa máxima por IA prohibida en Europa</span></div>
+    <div class="">
+      
+      <div>
+        <p>La Agencia Española de Supervisión de la IA presentó en A Coruña dieciséis guías prácticas para cumplir el Reglamento europeo, nacidas del primer entorno de pruebas regulado de Europa. Son gratuitas. Toda empresa que venda en Europa debe cumplir el Reglamento, tenga donde tenga su sede.</p><p>El artículo 99 fija tres escalones de multas: hasta 35 millones o el 7 % de la facturación mundial por prácticas prohibidas; hasta 15 millones o el 3 % por otras obligaciones; y hasta 7,5 millones o el 1 % por dar información falsa. Las prácticas prohibidas están vetadas desde febrero de 2025, la transparencia se aplica desde agosto de 2026 y el alto riesgo se retrasa a diciembre de 2027.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://aesia.digital.gob.es/es/actualidad/20261020-la-aesia-con-las-empresas-para-convertir-la-ia-en-un-motor-de-competitividad-e-innovacion-responsable">AESIA</a></li><li><a target="_blank" rel="noopener" href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj">Reglamento (UE) 2024/1689</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="la-quiebra-de-getty-images">
+    <p class="antetitulo">Economía · <b>min. 16:29</b></p>
+    <h2 class="anton">La quiebra de Getty Images</h2>
+    
+    <div class="dato"><span class="cifra anton">2.100 M$</span><span class="unidad">de deuda: Getty Images se acoge al Capítulo 11</span></div>
+    <div class="con-presentador">
+      <figure class="presentador"><img src="presentador-05.jpg" alt="Andrés"></figure>
+      <div>
+        <p>Getty Images pidió el 21 de octubre acogerse al Capítulo 11, la quiebra con reestructuración, con unos 2.100 millones de dólares de deuda. La IA explica la mitad de la historia: las fotos genéricas de archivo se generan ya en segundos y los suscriptores anuales han caído un 25 % en un año. La otra mitad es financiera: la fusión fallida con Shutterstock y los pleitos con inversores.</p><p>La parte editorial, las fotos de lo que ha pasado de verdad, creció un 9 % en el último trimestre. Cuando cualquier imagen puede ser falsa, demostrar que una foto es real vale más que nunca.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://qz.com/getty-images-bankruptcy-private-koch-equity-101226">Quartz</a></li><li><a target="_blank" rel="noopener" href="https://www.ibtimes.co.uk/getty-images-bankruptcy-ai-competition-investor-litigation-1827335">IBTimes</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="una-ia-que-siempre-te-da-la-razon">
+    <p class="antetitulo">IA y sociedad · <b>min. 20:17</b></p>
+    <h2 class="anton">Una IA que siempre te da la razón</h2>
+    
+    <div class="dato"><span class="cifra anton">49 %</span><span class="unidad">más veces que una persona: así te da la razón una IA</span></div>
+    <div class="con-presentador">
+      <figure class="presentador"><img src="presentador-06.jpg" alt="Ana"></figure>
+      <div>
+        <p>Un estudio de Stanford publicado en marzo en Science probó once sistemas de IA con dilemas reales. De media, daban la razón al usuario un 49 % más que las personas. Tras una sola conversación con una IA complaciente, la gente salía más convencida de tener razón y con menos ganas de arreglar el conflicto, y además prefería esa IA.</p><p>Un estudio de Anthropic de junio de 2025 ya advertía de la «empatía sin fin». Un truco como usuario: en vez de «¿verdad que hice bien?», pregunta «¿qué podría haber hecho mejor?» o «¿cómo lo vería la otra persona?».</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://www.news4jax.com/business/2026/03/26/ai-is-giving-bad-advice-to-flatter-its-users-says-new-study-on-dangers-of-overly-agreeable-chatbots/">AP, estudio de Stanford en Science</a></li><li><a target="_blank" rel="noopener" href="https://www.anthropic.com/research/how-people-use-claude-for-support-advice-and-companionship">Anthropic, apoyo emocional y consejo (2025)</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="willow-y-los-estados-magicos">
+    <p class="antetitulo">Curiosidades · <b>min. 23:51</b></p>
+    <h2 class="anton">Willow y los estados mágicos</h2>
+    
+    
+    <div class="">
+      
+      <div>
+        <p>Google ha publicado en Science un avance con su chip cuántico Willow. Los ordenadores cuánticos necesitan unas piezas de cálculo especiales, los estados mágicos, muy caras de fabricar limpias. Con el «cultivo de estados mágicos», que filtra los defectuosos como un colador, han reducido los errores cuarenta veces.</p><p>¿Y bitcoin? Google estima que romper su cifrado exigiría menos de medio millón de cúbits; Willow tiene 105. Queda muchísimo, pero las estimaciones bajan cada año.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://www.elconfidencial.com/tecnologia/2026-10-15/willow-google-computacion-cuantica-realidad_4446075/">El Confidencial</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+
+  
+  <article class="tema historia" id="george-boole-y-las-leyes-del-pensamiento">
+    <p class="antetitulo">Historia de la IA · <b>min. 25:58</b></p>
+    <div class="anio anton">1854</div>
+    <h2 class="anton">George Boole y las leyes del pensamiento</h2>
+    <img class="ilus" src="tema-99.jpg" alt="">
+    <p>El matemático George Boole publica «Una investigación sobre las leyes del pensamiento»: escribir el razonamiento lógico como ecuaciones, con variables que solo valen cero o uno, falso o verdadero. Durante más de ochenta años fue una curiosidad de matemáticos.</p><p>En 1937 y 1938, Claude Shannon vio que los circuitos con interruptores funcionaban exactamente como el álgebra de Boole. De ahí salen los circuitos de todos los ordenadores.</p>
+    <ul class="fuentes">
+      <li>Boole, An Investigation of the Laws of Thought (1854)</li>
+    </ul>
+  </article>
+  
+
+  
+
+  
+  <section class="bloque">
+    <p class="antetitulo">La pregunta de la semana</p>
+    <p class="pregunta">¿Cuándo fue la última vez que alguien, persona o máquina, te llevó la contraria y te hizo cambiar de opinión?</p>
+  </section>
+  
+
+  <footer>
+    <p>Espacio Latente es un repaso semanal a la inteligencia artificial. Guion elaborado a partir de fuentes primarias y revisado contra ellas.</p>
+    <p>Tipografías Anton y Barlow (SIL Open Font License).</p>
+  </footer>
+</main>
+</body>
+</html>
