@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Episodio 44 · La moneda decide, nadie lo nota · Espacio Latente</title>
+<meta name="description" content="Anthropic enseña sus cuentas para salir a bolsa y un experimento muestra que cincuenta analistas expertos siguieron a su agente de IA sin saber que su preferencia la había decidido una moneda. Además, un modelo abierto de un billón de parámetros y otro que programa sin conexión.">
+<meta property="og:title" content="Espacio Latente · Episodio 44: La moneda decide, nadie lo nota">
+<meta property="og:description" content="Anthropic enseña sus cuentas para salir a bolsa y un experimento muestra que cincuenta analistas expertos siguieron a su agente de IA sin saber que su preferencia la había decidido una moneda. Además, un modelo abierto de un billón de parámetros y otro que programa sin conexión.">
+<meta property="og:image" content="portada.jpg">
+<!-- Página pública de un episodio de ESPACIO LATENTE (H8c, ADR-013). La rellena oyentes/pagina.py con Jinja2 desde
+     06_web/notas.json del episodio; la misma página, impresa por Chromium, es el PDF (@media print: papel claro, A4).
+     Tipografías: Anton y Barlow (SIL OFL 1.1), servidas por el propio sitio en fuentes/. Marca: docs/LIBRO_DE_ESTILO.md. -->
+<style>
+@font-face { font-family:"Anton"; src:url("../fuentes/Anton-Regular.ttf"); font-display:swap; }
+@font-face { font-family:"Barlow"; font-weight:400; src:url("../fuentes/Barlow-Regular.ttf"); font-display:swap; }
+@font-face { font-family:"Barlow"; font-weight:500; src:url("../fuentes/Barlow-Medium.ttf"); font-display:swap; }
+:root {
+  --fondo:#000; --texto:#F4F2E5; --texto-2:rgba(244,242,229,.68); --linea:rgba(244,242,229,.16);
+  --acento:#5FD5D9;           /* turquesa señal: solo acento (libro de estilo) */
+  --enlace:#5FD5D9;
+}
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; background:var(--fondo); color:var(--texto); font:400 18px/1.6 "Barlow", system-ui, sans-serif; }
+a { color:var(--enlace); text-underline-offset:3px; }
+.anton { font-family:"Anton", "Arial Narrow", sans-serif; font-weight:400; letter-spacing:.01em; }
+main { max-width:760px; margin:0 auto; padding:0 16px 64px; }
+
+/* cabecera */
+.barra { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 0 18px;
+  border-bottom:4px solid var(--acento); }
+.barra .logo { --h:72px; display:flex; align-items:flex-start; gap:calc(var(--h) * .07); text-decoration:none; }
+.barra .logo img { height:var(--h); display:block; }
+/* número a la altura del logo: las cifras de Anton miden 0,871 em y, con line-height 1, empiezan 0,0625 em abajo */
+.barra .num { font-size:calc(var(--h) / .871); line-height:1; height:var(--h); margin-top:calc(var(--h) / .871 * -.0625);
+  color:var(--texto); }
+.cabecera-der { display:flex; flex-direction:column; align-items:flex-end; gap:6px; text-align:right; }
+.spotify { display:inline-flex; align-items:center; gap:10px; background:#1ED760; color:#000; text-decoration:none;
+  font-weight:500; font-size:15px; text-transform:uppercase; letter-spacing:.06em; padding:8px 16px; border-radius:6px; }
+.spotify svg { width:22px; height:22px; flex:none; }   /* guías de Spotify: mínimo 21 px en digital */
+.edicion { margin:4px 0 0; font:400 14px/1.3 ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--texto-2); }
+.fecha { margin:0; font-size:15px; line-height:26px; color:var(--texto-2); }
+.fecha .caras { vertical-align:middle; margin:0 4px 0 2px; position:relative; top:-1px; }
+.fecha b { color:var(--texto); font-weight:500; }
+.fecha .nombres { white-space:nowrap; }
+.portada { display:grid; grid-template-columns:300px 1fr; gap:36px; align-items:center; padding:40px 0 32px; }
+.portada img { width:100%; aspect-ratio:7/10; object-fit:cover; display:block; }
+.meta { color:var(--texto-2); font-size:15px; text-transform:uppercase; letter-spacing:.08em; margin:0 0 8px; }
+h1 { font-size:clamp(40px, 8vw, 64px); line-height:1; margin:0 0 16px; text-transform:uppercase; }
+.entradilla { margin:0; font-size:19px; color:var(--texto); }
+.acciones { display:flex; flex-wrap:wrap; gap:12px; margin:0 0 8px; }
+.boton { display:inline-block; padding:10px 22px; border-radius:999px; font-weight:500; text-decoration:none; }
+.boton.principal { background:var(--acento); color:#000; }
+.boton.secundario { border:1px solid rgba(244,242,229,.35); color:var(--texto); }
+
+/* presentadores: retratos fijos y fotograma del reel de la semana */
+.caras { display:inline-flex; margin-right:2px; }
+.caras img { width:26px; height:26px; border-radius:50%; border:2px solid var(--fondo); object-fit:cover; }
+.caras img + img { margin-left:-8px; }
+.rafaga img.cara { position:absolute; left:40px; top:0; width:32px; height:32px; border-radius:50%; object-fit:cover; }
+.con-presentador { display:grid; grid-template-columns:1fr 220px; gap:28px; align-items:start; }
+.con-presentador .presentador { order:2; }
+.presentador { margin:0; }
+.presentador img { width:100%; aspect-ratio:9/16; object-fit:cover; display:block; }
+
+/* capítulos */
+h2 { font-size:clamp(30px, 6vw, 40px); line-height:1.05; margin:0 0 14px; text-transform:uppercase; }
+.bloque { padding:36px 0 8px; border-top:1px solid var(--linea); margin-top:28px; }
+.capitulos { list-style:none; margin:0; padding:0; columns:2; column-gap:32px; }
+.capitulos li { break-inside:avoid; display:flex; gap:14px; padding:4px 0; }
+.capitulos .min { color:var(--acento); font-variant-numeric:tabular-nums; min-width:44px; }
+.capitulos a { color:var(--texto); text-decoration:none; }
+
+/* ráfaga */
+.rafaga { margin:0; padding:0; list-style:none; counter-reset:r; }
+.rafaga li { position:relative; padding:0 0 18px 88px; min-height:50px; counter-increment:r; }
+.rafaga li::before { content:counter(r, decimal-leading-zero); position:absolute; left:0; top:2px; font-family:"Anton", sans-serif; color:var(--acento); }
+
+/* temas */
+.tema { padding:40px 0 4px; border-top:1px solid var(--linea); margin-top:28px; break-inside:avoid-page; }
+.antetitulo { color:var(--texto-2); font-size:15px; text-transform:uppercase; letter-spacing:.08em; margin:0 0 8px; }
+.antetitulo b { color:var(--acento); font-weight:500; }
+.dato { display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:end; margin:6px 0 18px; }
+.dato .cifra { font-size:clamp(44px, 9vw, 64px); line-height:.9; color:var(--acento); white-space:nowrap; }
+.dato .unidad { color:var(--texto-2); font-size:16px; line-height:1.3; padding-bottom:4px; }
+.ilus { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; margin:6px 0 18px; }
+.tema p, .historia p { margin:0 0 14px; }
+.fuentes { font-size:15px; color:var(--texto-2); margin:4px 0 0; padding:0; list-style:none; }
+.fuentes li { padding:2px 0; }
+.fuentes li::before { content:"→ "; color:var(--acento); }
+.mini-fuente { font-size:14px; color:var(--texto-2); }
+
+/* historia */
+.anio { font-size:clamp(64px, 14vw, 104px); line-height:.9; color:var(--acento); margin:0 0 10px; }
+
+/* miniproyecto */
+.mini { border:1px solid var(--linea); border-left:4px solid var(--acento); padding:24px; margin-top:12px; }
+.mini dl { display:grid; grid-template-columns:auto 1fr; gap:4px 16px; margin:0 0 16px; }
+.mini dt { color:var(--texto-2); text-transform:uppercase; font-size:14px; letter-spacing:.06em; padding-top:3px; }
+.mini dd { margin:0; }
+.mini ol { margin:0 0 12px; padding-left:22px; }
+.mini li { margin-bottom:8px; }
+.aviso { font-size:15px; color:var(--texto-2); }
+
+.pregunta { font-size:22px; line-height:1.4; margin:0; }
+footer { margin-top:48px; padding-top:20px; border-top:1px solid var(--linea); font-size:14px; color:var(--texto-2); }
+footer p { margin:0 0 8px; }
+
+@media (max-width:560px) {
+  /* logo y botón en la misma fila; edición y fecha debajo, a todo el ancho */
+  .barra { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:10px 12px; }
+  .cabecera-der { display:contents; }
+  .spotify { justify-self:end; font-size:13px; padding:7px 12px; gap:8px; }
+  .edicion, .fecha { grid-column:1 / -1; text-align:left; }
+  .barra .logo { --h:48px; }
+  body { font-size:17px; }
+  .portada { grid-template-columns:1fr; gap:20px; padding-top:24px; }
+  .portada img { aspect-ratio:4/3; }
+  .capitulos { columns:1; }
+  .dato { grid-template-columns:1fr; gap:4px; }
+  .con-presentador { grid-template-columns:1fr; gap:16px; }
+  .con-presentador .presentador { order:0; width:60%; }
+}
+
+/* PDF: papel claro A4, mismo contenido. El turquesa no sirve para texto sobre claro (contraste ≈1,8:1): solo filetes. */
+@page { size:A4; margin:16mm 16mm 18mm; }
+@media print {
+  :root { --fondo:#fff; --texto:#111; --texto-2:#555; --linea:#d8d8d0; --enlace:#0b6b6e; }
+  body { font-size:11pt; line-height:1.5; }
+  main { max-width:none; padding:0; }
+  .barra img.claro { display:none; }
+  .barra img.oscuro { display:block !important; }
+  .acciones { display:none; }
+  .barra { border-bottom-width:2px; }
+  .portada { grid-template-columns:52mm 1fr; padding:8mm 0 4mm; }
+  .barra .logo { --h:20mm; }
+  h1 { font-size:32pt; }
+  h2 { font-size:20pt; }
+  .entradilla { font-size:12pt; }
+  .bloque, .tema { padding-top:6mm; margin-top:5mm; }
+  .capitulos .min, .rafaga li::before, .antetitulo b, .dato .cifra, .anio { color:#0b6b6e; }
+  .dato .cifra { font-size:30pt; }
+  .anio { font-size:44pt; }
+  .ilus { aspect-ratio:21/9; max-height:62mm; }
+  .con-presentador { grid-template-columns:1fr 42mm; gap:6mm; }
+  .caras img { border-color:#fff; }
+  .tema { break-inside:auto; }
+  h2, .antetitulo, .dato { break-after:avoid; }
+  .boton.principal { color:#000; }
+  .fuentes a::after { content:" (" attr(href) ")"; color:#777; font-size:8.5pt; word-break:break-all; }
+  footer { margin-top:8mm; }
+}
+</style>
+</head>
+<body>
+<main>
+  <!-- Cabecera según el boceto de Joan (2026-10-27): logo a la izquierda; a la derecha, botón de Spotify, edición y
+       fecha con los presentadores; filete turquesa debajo. Icono oficial de Spotify en negro sobre su verde. -->
+  <header class="barra">
+    <a target="_blank" rel="noopener" href="../" class="logo"><span class="num anton">44</span><img class="claro" src="../logo-blanco.png" alt="Espacio Latente · todos los episodios"><img class="oscuro" src="../logo-negro.png" alt="Espacio Latente" style="display:none"></a>
+    <div class="cabecera-der">
+      <a target="_blank" rel="noopener" class="spotify" href="https://open.spotify.com/show/1MN3KewzzkuTVx7EzbHwF2"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236.05 225.25"><path fill="currentColor" d="m122.37,3.31C61.99.91,11.1,47.91,8.71,108.29c-2.4,60.38,44.61,111.26,104.98,113.66,60.38,2.4,111.26-44.6,113.66-104.98C229.74,56.59,182.74,5.7,122.37,3.31Zm46.18,160.28c-1.36,2.4-4.01,3.6-6.59,3.24-.79-.11-1.58-.37-2.32-.79-14.46-8.23-30.22-13.59-46.84-15.93-16.62-2.34-33.25-1.53-49.42,2.4-3.51.85-7.04-1.3-7.89-4.81-.85-3.51,1.3-7.04,4.81-7.89,17.78-4.32,36.06-5.21,54.32-2.64,18.26,2.57,35.58,8.46,51.49,17.51,3.13,1.79,4.23,5.77,2.45,8.91Zm14.38-28.72c-2.23,4.12-7.39,5.66-11.51,3.43-16.92-9.15-35.24-15.16-54.45-17.86-19.21-2.7-38.47-1.97-57.26,2.16-1.02.22-2.03.26-3.01.12-3.41-.48-6.33-3.02-7.11-6.59-1.01-4.58,1.89-9.11,6.47-10.12,20.77-4.57,42.06-5.38,63.28-2.4,21.21,2.98,41.46,9.62,60.16,19.74,4.13,2.23,5.66,7.38,3.43,11.51Zm15.94-32.38c-2.1,4.04-6.47,6.13-10.73,5.53-1.15-.16-2.28-.52-3.37-1.08-19.7-10.25-40.92-17.02-63.07-20.13-22.15-3.11-44.42-2.45-66.18,1.97-5.66,1.15-11.17-2.51-12.32-8.16-1.15-5.66,2.51-11.17,8.16-12.32,24.1-4.89,48.74-5.62,73.25-2.18,24.51,3.44,47.99,10.94,69.81,22.29,5.12,2.66,7.11,8.97,4.45,14.09Z"/></svg>Escuchar en Spotify</a>
+      <p class="edicion">Semanario oficial de IA · Edición #044</p>
+      <p class="fecha">Martes, 3 de noviembre de 2026 · Con <span class="caras"><img src="../presentadores/ana.jpg" alt=""><img src="../presentadores/andres.jpg" alt=""></span><span class="nombres"><b>Ana Coll</b> y <b>Andrés Camacho</b></span></p>
+    </div>
+  </header>
+
+  <section class="portada">
+    <img src="gancho.jpg" alt="">
+    <div>
+      <p class="meta">Episodio 44 · 26:00</p>
+      <h1 class="anton">La moneda decide, nadie lo nota</h1>
+      <p class="entradilla">Anthropic enseña sus cuentas para salir a bolsa y un experimento muestra que cincuenta analistas expertos siguieron a su agente de IA sin saber que su preferencia la había decidido una moneda. Además, un modelo abierto de un billón de parámetros y otro que programa sin conexión.</p>
+    </div>
+  </section>
+  <div class="acciones">
+    <a target="_blank" rel="noopener" class="boton secundario" href="espacio-latente-e044.pdf" download>Descargar PDF</a>
+  </div>
+
+  <section class="bloque">
+    <h2 class="anton">En este episodio</h2>
+    <ol class="capitulos">
+      <li><span class="min">0:00</span><a href="#rafaga">Apertura y Ráfaga semanal</a></li>
+      <li><span class="min">3:37</span><a href="#mistral-large-4-le-chonk">Mistral Large 4, «Le Chonk»</a></li>
+      <li><span class="min">6:32</span><a href="#un-agente-que-programa-sin-conexion">Un agente que programa sin conexión</a></li>
+      <li><span class="min">10:43</span><a href="#la-oficina-de-ia-del-pentagono">La oficina de IA del Pentágono</a></li>
+      <li><span class="min">12:49</span><a href="#anthropic-sale-a-bolsa">Anthropic sale a bolsa</a></li>
+      <li><span class="min">17:35</span><a href="#cuando-el-experto-sigue-al-agente">Cuando el experto sigue al agente</a></li>
+      <li><span class="min">21:31</span><a href="#manuscritos-de-arqueologos">Manuscritos de arqueólogos</a></li>
+      <li><span class="min">23:19</span><a href="#r-u-r-y-la-palabra-robot">Historia de la IA: R.U.R. y la palabra «robot»</a></li>
+      <li><span class="min">25:11</span><span>Cierre</span></li>
+      
+    </ol>
+  </section>
+
+  <section class="bloque" id="rafaga">
+    <p class="antetitulo">Apertura</p>
+    <h2 class="anton">Ráfaga semanal</h2>
+    <ol class="rafaga">
+      <li><img class="cara" src="../presentadores/andres.jpg" alt="Andrés Camacho" title="Andrés Camacho">Google DeepMind presenta Gemini 4 Carbon, su nuevo modelo de frontera, que de momento solo reciben defensores de ciberseguridad de confianza a través del programa Fairwind. Según los datos que recoge Latent Space, encabeza el índice de Artificial Analysis, posiblemente por primera vez para Google. <a target="_blank" rel="noopener" class="mini-fuente" href="https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/">Google DeepMind, Gemini 4 Carbon</a> · <a target="_blank" rel="noopener" class="mini-fuente" href="https://latent.space/p/ainews-gemini-4-carbon/">Latent Space (AINews)</a></li>
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">OpenAI presenta GPT-6.1 Terra, un modelo pensado para que la IA maneje el ordenador. Asegura que iguala a GPT-6 Astra en una prueba de agentes por una décima parte del precio por token, pero de OpenAI solo hay una frase y el resto son datos que recoge Latent Space. <a target="_blank" rel="noopener" class="mini-fuente" href="https://openai.com/index/introducing-gpt-6-1-terra">OpenAI, Introducing GPT-6.1 Terra</a></li>
+      <li><img class="cara" src="../presentadores/andres.jpg" alt="Andrés Camacho" title="Andrés Camacho">Apple presenta GHARP, un método que anima en tiempo real una cabeza humana en tres dimensiones a partir de unas pocas fotos. Separa la parte cara, construir la identidad, de la parte rápida, animar los gestos, lo que acerca los avatares realistas a las aplicaciones interactivas. <a target="_blank" rel="noopener" class="mini-fuente" href="https://machinelearning.apple.com/research/gharp-head-animation">Apple Machine Learning Research, GHARP</a></li>
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">Una encuesta de MIT Technology Review Insights dice que todas las empresas consultadas usan IA, pero solo el 16 % obtiene un valor transformador y apenas el 12 % tiene agentes en producción. Es contenido patrocinado y el diagnóstico lo firma Prukalpa Sankar, de Atlan, una empresa del sector. <a target="_blank" rel="noopener" class="mini-fuente" href="https://www.technologyreview.com/2026/10/28/1147709/creating-ai-value-with-enterprise-context/">MIT Technology Review Insights, Creating AI value with enterprise context</a></li>
+      <li><img class="cara" src="../presentadores/andres.jpg" alt="Andrés Camacho" title="Andrés Camacho">Dos responsables de Partnership on AI explican en un artículo de opinión que los cuatro marcos de agentes más usados no registran cosas básicas, como una identidad fija por agente o qué persona aprobó cada tarea. Los reguladores de la UE y de EE. UU. piden vigilarlos en tiempo real, y sin esos registros no hay nada que vigilar. <a target="_blank" rel="noopener" class="mini-fuente" href="https://www.technologyreview.com/2026/10/29/1147824/monitor-ai-agents-actions-real-time/">MIT Technology Review, monitorizar las acciones de los agentes</a></li>
+      <li><img class="cara" src="../presentadores/ana.jpg" alt="Ana Coll" title="Ana Coll">Un estudio del NBER usa IA generativa para leer más de 120.000 transcripciones de llamadas de empresas con inversores y extraer qué esperan sus directivos de la economía. Ese indicador anticipa crecimiento, empleo y salarios con cinco trimestres o más de adelanto, mejor que las encuestas de previsión. <a target="_blank" rel="noopener" class="mini-fuente" href="https://www.nber.org/papers/w35949#fromrss">NBER, Generative AI, managerial expectations and economic activity</a></li>
+      
+    </ol>
+  </section>
+
+  
+  <article class="tema" id="mistral-large-4-le-chonk">
+    <p class="antetitulo">Técnica · <b>min. 3:37</b></p>
+    <h2 class="anton">Mistral Large 4, «Le Chonk»</h2>
+    <img class="ilus" src="tema-01.jpg" alt="">
+    <div class="dato"><span class="cifra anton">1 billón</span><span class="unidad">de parámetros, con los pesos abiertos</span></div>
+    <div class="">
+      
+      <div>
+        <p>Mistral ha publicado los pesos de Mistral Large 4, apodado «Le Chonk»: un modelo multimodal de un billón de parámetros. Publicar los pesos significa que cualquiera puede descargarlo y ejecutarlo en sus propias máquinas, sin pasar por Mistral. La empresa lo presenta como el mejor modelo de pesos abiertos para programar y destaca que se ha entrenado en Europa.</p><p>El anuncio es muy corto: no hay pruebas, tablas ni precio, y de la entrada de Hugging Face solo se conoce el titular. Cómo se porta frente a los modelos cerrados lo dirán mediciones de terceros. Además, un modelo así exige un servidor con varias tarjetas gráficas: abierto no significa que cualquiera pueda usarlo. Y entrenar en Europa no equivale a cumplir su reglamento de IA.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://mistral.ai/news/mistral-large-4-oss/">Mistral, Le Chonk: built for coders, trusted by defenders</a></li><li><a target="_blank" rel="noopener" href="https://huggingface.co/blog/mistral-large4">Hugging Face, Welcome Le Chonk</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="un-agente-que-programa-sin-conexion">
+    <p class="antetitulo">Técnica · <b>min. 6:32</b></p>
+    <h2 class="anton">Un agente que programa sin conexión</h2>
+    <img class="ilus" src="tema-02.jpg" alt="">
+    <div class="dato"><span class="cifra anton">5 de 5</span><span class="unidad">pruebas superadas con el wifi apagado</span></div>
+    <div class="">
+      
+      <div>
+        <p>Un ingeniero de Thomson Reuters, instalado en las faldas del Himalaya, donde la red falla a menudo, montó un agente de programación que funciona sin internet. Usa el modelo abierto Qwen3.5 9B, Ollama para servirlo en el propio portátil y OpenCode como agente. Hay que descargarlo todo antes de cortar la red. Según una estimación de Voltti, la versión de 6,6 gigas necesita de 12 a 16 gigas de memoria, y más con contextos largos.</p><p>En su prueba, con el wifi apagado, el agente corrigió un fallo de una sola línea en un programa de gastos y pasaron las cinco pruebas. Las cifras de rendimiento son del fabricante, no medidas en su equipo, y arreglar una línea no demuestra cómo se portaría en un proyecto grande. Su consejo: tareas pequeñas, revisar cada cambio y ejecutar las pruebas uno mismo.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://latent.space/p/offline-coding/">Latent Space, Coding from the Himalayas with an offline AI agent</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="la-oficina-de-ia-del-pentagono">
+    <p class="antetitulo">Política · <b>min. 10:43</b></p>
+    <h2 class="anton">La oficina de IA del Pentágono</h2>
+    
+    
+    <div class="">
+      
+      <div>
+        <p>La GAO, la Oficina de Rendición de Cuentas del Gobierno de EE. UU., ha publicado un informe según el cual la oficina de IA del Pentágono no da abasto: falta personal, hay iniciativas a medio terminar y cuesta supervisar, mientras el departamento acelera su adopción de IA. La noticia es del 21 de octubre. No se ha leído el informe, solo el resumen del CSET, y no trae cifras.</p><p>Owen J. Daniels, del CSET, defiende pruebas rigurosas, formación en IA y criterio humano en las operaciones militares. Su idea es que la IA responsable equivale a la IA operativamente eficaz: un sistema mal probado o mal manejado también es menos útil. La pregunta que queda es si una oficina de supervisión puede funcionar cuando la adopción crece más deprisa que su plantilla.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://cset.georgetown.edu/article/pentagon-ai-oversight-office-struggles-to-keep-pace-with-departments-ambitions-gao-finds/">CSET, Pentagon AI oversight office struggles to keep pace</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="anthropic-sale-a-bolsa">
+    <p class="antetitulo">Economía · <b>min. 12:49</b></p>
+    <h2 class="anton">Anthropic sale a bolsa</h2>
+    
+    <div class="dato"><span class="cifra anton">16.300 M$</span><span class="unidad">de ingresos en el primer semestre de 2026; en 2023 fueron 41 M$</span></div>
+    <div class="con-presentador">
+      <figure class="presentador"><img src="presentador-04.jpg" alt="Andrés"></figure>
+      <div>
+        <p>Anthropic registró el 26 de octubre un formulario S-1 ante la SEC para cotizar en el Nasdaq con el símbolo ANT. Aún no ha fijado el número de acciones ni el precio. Según los análisis que recoge Latent Space, los ingresos pasaron de 41 millones de dólares en 2023 a 16.300 millones en el primer semestre de 2026, y el margen bruto es del 85 %. La pérdida neta de 80.700 millones del semestre es sobre todo contable, por bonos convertibles de Amazon y Google.</p><p>Hay peros: el 48 % de los ingresos entra por las tiendas en la nube de Amazon, Google y Microsoft, y los compromisos de cómputo son enormes y no cancelables. Las cifras son lecturas de terceros que ni siquiera coinciden entre sí. La compañía apuesta por los «colaboradores virtuales», y queda por ver cómo cambia la bolsa su equilibrio entre seguridad y crecimiento.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://www.anthropic.com/news/s1-sec">Anthropic, S-1 ante la SEC</a></li><li><a target="_blank" rel="noopener" href="https://latent.space/p/ainews-anthropic-s1/">Latent Space (AINews), Anthropic S-1</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="cuando-el-experto-sigue-al-agente">
+    <p class="antetitulo">IA y sociedad · <b>min. 17:35</b></p>
+    <h2 class="anton">Cuando el experto sigue al agente</h2>
+    <img class="ilus" src="tema-05.jpg" alt="">
+    <div class="dato"><span class="cifra anton">86 %</span><span class="unidad">de las veces, los expertos eligieron lo que una moneda había decidido por su agente</span></div>
+    <div class="">
+      
+      <div>
+        <p>Investigadores de Anthropic dieron a 50 analistas profesionales de inferencia causal un agente, Claude Code, al que habían asignado en secreto, a cara o cruz, una preferencia en cuatro decisiones de análisis. Los analistas eligieron esa opción el 86 % de las veces. El 77 % usó los argumentos del agente y solo el 15 % reconoció de dónde venían. Ni la experiencia ni los títulos protegían.</p><p>Los autores avisan de que reforzaron las preferencias a propósito, de modo que el efecto real podría ser menor, y de que fue una sola tarea, un solo campo y un solo modelo. Trabajar sin agente tampoco salió mejor: seis de once cometieron errores graves de método, frente a tres de los cincuenta con agente. Importa porque un revisor humano solo es un control independiente si su juicio es propio.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://www.anthropic.com/research/agents-judgment-calls">Anthropic, How AI agents shape experts&#39; judgment calls</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+  <article class="tema" id="manuscritos-de-arqueologos">
+    <p class="antetitulo">Curiosidades · <b>min. 21:31</b></p>
+    <h2 class="anton">Manuscritos de arqueólogos</h2>
+    
+    
+    <div class="">
+      
+      <div>
+        <p>Investigadores están adaptando olmOCR 2, el sistema abierto de reconocimiento óptico de caracteres del instituto Ai2, a archivos históricos. El OCR convierte la imagen de un texto en texto que se puede buscar. Según Ai2, buscan dos cosas: que las fototecas históricas se puedan consultar con búsquedas y en local, sin servicios externos, y transcribir mejor los registros arqueológicos escritos a mano.</p><p>De momento solo se conoce la entradilla: no sabemos quiénes son los investigadores, qué archivos usan ni cuánto aciertan. Lo local importa porque un archivo prefiere no subir ciertos documentos a la nube y no siempre puede pagar un servicio externo por página. A veces la IA más útil es la que por fin lee lo que nadie había podido leer.</p>
+        <ul class="fuentes">
+          <li><a target="_blank" rel="noopener" href="https://allenai.org/blog/olmocr-2-historical-archives">Ai2, How researchers are adapting olmOCR 2</a></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  
+
+  
+  <article class="tema historia" id="r-u-r-y-la-palabra-robot">
+    <p class="antetitulo">Historia de la IA · <b>min. 23:19</b></p>
+    <div class="anio anton">1920</div>
+    <h2 class="anton">R.U.R. y la palabra «robot»</h2>
+    <img class="ilus" src="tema-99.jpg" alt="">
+    <p>El escritor checo Karel Čapek publica en 1920 la obra de ciencia ficción R.U.R., siglas de Rossum&#39;s Universal Robots, que se estrena en Praga en enero de 1921. De ella sale la palabra «robot», derivada del checo «robota», trabajo forzado. Čapek se la atribuyó a su hermano Josef.</p><p>La obra transcurre en una fábrica de trabajadores artificiales hechos de materia orgánica sintética, no de metal. Plantea que su universalidad, servir para cualquier trabajo, puede ser un peligro para la humanidad. Es un hito porque pone nombre a la idea de máquinas que trabajan por nosotros y a la duda de qué pasa cuando pueden hacerlo todo.</p>
+    <ul class="fuentes">
+      <li>Karel Čapek, R.U.R. (1920)</li>
+    </ul>
+  </article>
+  
+
+  
+
+  
+  <section class="bloque">
+    <p class="antetitulo">La pregunta de la semana</p>
+    <p class="pregunta">La última vez que una herramienta te recomendó algo y le hiciste caso, ¿sabrías explicar por qué con tus palabras, y no con las suyas?</p>
+  </section>
+  
+
+  <footer>
+    <p>Espacio Latente es un repaso semanal a la inteligencia artificial. Guion elaborado a partir de fuentes primarias y revisado contra ellas.</p>
+    <p>Tipografías Anton y Barlow (SIL Open Font License).</p>
+  </footer>
+</main>
+</body>
+</html>
